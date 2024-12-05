@@ -16,6 +16,8 @@ const KhamBenh = require('../../model/KhamBenh');
 
 const nodemailer = require('nodemailer');
 
+const BenhNhan = require('../../model/BenhNhan')
+
 module.exports = {
     fetchAllDoctor: async (req, res) => {
         try {
@@ -974,6 +976,97 @@ module.exports = {
             return res.status(500).json({ message: 'Có lỗi xảy ra!', error });
         }
     },
+
+
+    //----------------------------------------------------------------
+    // updateTrangThaiDaKham: async (req, res) => {
+    //     try {
+    //         // Lấy thông tin từ request body
+    //         const { idLichHen } = req.body;
+
+    //         // Kiểm tra nếu không có idLichHen
+    //         if (!idLichHen) {
+    //             return res.status(400).json({ message: 'Thiếu id lịch hẹn!' });
+    //         }
+
+    //         // Tìm lịch hẹn hiện tại
+    //         const lichHen = await KhamBenh.findById(idLichHen);
+
+    //         // Kiểm tra nếu không tìm thấy lịch hẹn
+    //         if (!lichHen) {
+    //             return res.status(404).json({ message: 'Không tìm thấy lịch hẹn!' });
+    //         }
+
+    //         // Xác định trạng thái mới dựa trên trạng thái hiện tại
+    //         const newStatus = lichHen.trangThai === "Đã xác nhận" ? "Chưa xác nhận" : "Đã xác nhận";
+
+    //         // Cập nhật trạng thái của lịch hẹn
+    //         const updatedLichHen = await KhamBenh.findByIdAndUpdate(
+    //             idLichHen,
+    //             { trangThai: newStatus }, // Chuyển đổi trạng thái
+    //             { new: true } // Trả về dữ liệu mới sau khi cập nhật
+    //         )
+    //             .populate("_idDoctor _idTaiKhoan") // Populate liên kết tương tự
+    //             .populate({
+    //                 path: '_idDoctor',
+    //                 populate: [
+    //                     { path: 'chucVuId' },
+    //                     { path: 'chuyenKhoaId' },
+    //                     { path: 'phongKhamId' },
+    //                 ]
+    //             })
+    //             .populate({
+    //                 path: '_idTaiKhoan',
+    //                 model: 'BenhNhan'
+    //             });
+
+    //         // Trả về phản hồi thành công
+    //         return res.status(200).json({
+    //             message: 'Cập nhật trạng thái thành công!',
+    //             data: updatedLichHen
+    //         });
+    //     } catch (error) {
+    //         console.error(error);
+    //         return res.status(500).json({ message: 'Có lỗi xảy ra!', error });
+    //     }
+    // },
+
+    // // Controller để cập nhật ghi chú (bệnh án)
+    // updateGhiChuBenhAn: async (req, res) => {
+    //     try {
+    //         const { idLichHen, ghiChu } = req.body;  // Lấy thông tin từ request body
+
+    //         // Kiểm tra nếu không có idLichHen hoặc ghiChu
+    //         if (!idLichHen || !ghiChu) {
+    //             return res.status(400).json({ message: 'Thiếu id lịch hẹn hoặc ghi chú!' });
+    //         }
+
+    //         // Tìm lịch hẹn hiện tại
+    //         const lichHen = await KhamBenh.findById(idLichHen);
+
+    //         // Kiểm tra nếu không tìm thấy lịch hẹn
+    //         if (!lichHen) {
+    //             return res.status(404).json({ message: 'Không tìm thấy lịch hẹn!' });
+    //         }
+
+    //         // Cập nhật ghi chú bệnh án
+    //         lichHen.ghiChu = ghiChu;  // Gán giá trị ghi chú vào trường ghiChu
+
+    //         // Lưu cập nhật
+    //         const updatedLichHen = await lichHen.save();
+
+    //         // Trả về phản hồi thành công
+    //         return res.status(200).json({
+    //             message: 'Cập nhật ghi chú bệnh án thành công!',
+    //             data: updatedLichHen
+    //         });
+    //     } catch (error) {
+    //         console.error(error);
+    //         return res.status(500).json({ message: 'Có lỗi xảy ra!', error });
+    //     }
+    // },
+
+
 
     // tìm ra chuyenKhoa để hiển thị chi tiết
     fetchChuyenKhoaByID: async (req, res) => {

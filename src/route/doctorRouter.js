@@ -63,6 +63,12 @@ router.post("/dat-lich-kham", userDoctor.datLichKham);
 router.get("/lich-hen", userDoctor.getLichHen);
 
 
+// cập nhật trạng thái đã khám xong cho bệnh nhân
+// router.put("/cap-nhat-trang-thai", userDoctor.updateTrangThaiDaKham);
+// //
+// router.post("/update-ghi-chu-benh-an", userDoctor.updateGhiChuBenhAn);
+
+
 // tim bac si thong qua id chuyen khoa
 router.get("/doctor-chuyen-khoa", userDoctor.fetchDoctorByChuyenKhoa);
 
