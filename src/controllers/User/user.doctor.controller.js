@@ -1347,6 +1347,60 @@ module.exports = {
             console.error(error);
             return res.status(500).json({ message: 'Có lỗi xảy ra!', error });
         }
-
     },
+
+    // ---------------
+    xacNhanLich: async (req, res) => {
+        try {
+            // const id = req.params.id
+            const { id, trangThaiXacNhan } = req.body;
+            console.log("active: ", trangThaiXacNhan);            
+                        
+            const updatedAccount = await KhamBenh.findByIdAndUpdate(id, { trangThaiXacNhan },  { new: true });
+
+            if (updatedAccount) {
+                return res.status(200).json({ message: "Cập nhật thành công", data: updatedAccount });
+            } else {
+                return res.status(404).json({ message: "Tài khoản không tìm thấy" });
+            }
+
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({
+                message: "Có lỗi xảy ra.",
+                error: error.message,
+            });
+        }
+    },
+
+    updateTTBN: async (req, res) => {
+        try {
+            let { _id, benhAn, trangThaiKham } = req.body
+
+            console.log("id: ", _id);
+
+            let createChucVu = await KhamBenh.updateOne({ _id: _id }, { benhAn, trangThaiKham })
+
+            if (createChucVu) {
+                console.log("Chỉnh sửa thành công thông tin khám");
+                return res.status(200).json({
+                    data: createChucVu,
+                    message: "Chỉnh sửa thông tin khám bác sĩ thành công"
+                })
+            } else {
+                return res.status(404).json({
+                    message: "Chỉnh sửa thông tin khám bác sĩ thất bại"
+                })
+            }
+
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({
+                message: "Có lỗi xảy ra khi Chỉnh sửa tài khoản bác sĩ.",
+                error: error.message,
+            });
+        }
+    },
+
+
 }
