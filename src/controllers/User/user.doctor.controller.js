@@ -801,6 +801,7 @@ module.exports = {
                 const timeGioList = await ThoiGianGio.find({ _id: { $in: timeGioIds } });
 
                 // Tạo mảng các tenGio
+
                 const tenGioArray = timeGioList.map(item => item.tenGio);
                 console.log("tenGioArray: ", tenGioArray);
 
@@ -961,6 +962,7 @@ module.exports = {
                     path: '_idTaiKhoan',
                     model: 'BenhNhan'
                 })
+                .sort({ createdAt: -1 }); // Sắp xếp theo thứ tự giảm dần của createdAt
 
             if (!findLichHen) {
                 return res.status(404).json({ message: 'Tìm lịch hẹn thất bại!' });
@@ -1200,7 +1202,7 @@ module.exports = {
                     errCode: 0,
                     data: {
                         findOrder: findOrder,
-                        totalOrder: totalOrder,  // Tổng số Order cho sản phẩm này
+                        totalOrder: totalOrder,
                         totalPages: totalPage,  // Tổng số trang
                         currentPage: pageNumber,  // Trang hiện tại
                     }
@@ -1354,9 +1356,9 @@ module.exports = {
         try {
             // const id = req.params.id
             const { id, trangThaiXacNhan } = req.body;
-            console.log("active: ", trangThaiXacNhan);            
-                        
-            const updatedAccount = await KhamBenh.findByIdAndUpdate(id, { trangThaiXacNhan },  { new: true });
+            console.log("active: ", trangThaiXacNhan);
+
+            const updatedAccount = await KhamBenh.findByIdAndUpdate(id, { trangThaiXacNhan }, { new: true });
 
             if (updatedAccount) {
                 return res.status(200).json({ message: "Cập nhật thành công", data: updatedAccount });

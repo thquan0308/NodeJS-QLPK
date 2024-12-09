@@ -79,7 +79,7 @@ router.get("/find-all-order-by-doctor", userDoctor.findAllLichHenByDoctor)
 router.get("/fetch-phong-kham-by-id", userDoctor.fetchPhongKhamByID);
 router.get("/doctor-phong-kham", userDoctor.fetchDoctorByPhongKham);
 
-router.put("/edit-xacnhan-lich", userDoctor.xacNhanLich );
-router.put("/edit-thongtinkham", userDoctor.updateTTBN );
+router.put("/edit-xacnhan-lich", userDoctor.xacNhanLich);
+router.put("/edit-thongtinkham", userDoctor.updateTTBN);
 
 module.exports = router;
