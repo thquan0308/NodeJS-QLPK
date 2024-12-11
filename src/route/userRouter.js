@@ -22,6 +22,11 @@ router.post("/logout-benh-nhan", loginBenhNhan.logoutBenhNhan);
 
 router.get("/get-one-kh", loginBenhNhan.getOneAccKH);
 
+router.get("/get-all-kh", loginBenhNhan.getAccKH);
+
+router.put("/khoa-kh", loginBenhNhan.khoaAccKH);
+router.delete("/delete-kh/:id", loginBenhNhan.deleteKH);
+
 router.put("/doi-thong-tin", loginBenhNhan.doiThongTinKH)
 
 router.put("/doi-mat-khau-doctor", loginDoctor.doiThongTinDoctor)

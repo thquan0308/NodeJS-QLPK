@@ -9,6 +9,7 @@ const BenhNhan_Schema = new mongoose.Schema({
     lastName: { type: String },
     address: { type: String },
     gender: { type: Boolean, },
+    isActive: { type: Boolean, default: true },
     image: { type: String },
     phone: { type: String },
     roleId: {

@@ -17,6 +17,10 @@ module.exports = {
             if (!admin) {
                 return res.status(401).json({ message: 'Email không tồn tại' });
             }
+            let messError = `Tài khoản này vi phạm quy định của trang và đang bị khóa! ` + '\n' + `Vui lòng liên hệ Admin!`
+            if (admin.isActive === false) {
+                return res.status(401).json({ message: messError });
+            }
 
             const saltRounds = 10;
             const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -157,5 +161,113 @@ module.exports = {
             })
         }
     },
+
+    getAccKH: async (req, res) => {
+        try {
+            const { page, limit, tenKH } = req.query;
+
+            // Chuyển đổi thành số
+            const pageNumber = parseInt(page, 10);
+            const limitNumber = parseInt(limit, 10);
+
+            // Tính toán số bản ghi bỏ qua
+            const skip = (pageNumber - 1) * limitNumber;
+
+            // Tạo query tìm kiếm
+            const query = {};
+            if (tenKH) {
+                const searchKeywords = tenKH.trim().split(/\s+/).map(keyword => {
+                    const normalizedKeyword = keyword.toLowerCase();  // Chuyển tất cả về chữ thường để không phân biệt
+                    return {
+                        $or: [
+                            { firstName: { $regex: normalizedKeyword, $options: 'i' } },
+                            { lastName: { $regex: normalizedKeyword, $options: 'i' } },
+                            { phone: { $regex: normalizedKeyword, $options: 'i' } },
+                            { address: { $regex: normalizedKeyword, $options: 'i' } },
+                        ]
+                    };
+                }).flat();  // flat() để biến các mảng lồng vào thành một mảng phẳng
+
+                query.$and = searchKeywords;  // Dùng $and để tìm tất cả các từ khóa
+            }
+
+            let bn = await BenhNhan.find(query).populate("roleId").skip(skip).limit(limitNumber)
+
+            const totalBenhNhan = await BenhNhan.countDocuments(query); // Đếm tổng số chức vụ
+
+            const totalPages = Math.ceil(totalBenhNhan / limitNumber); // Tính số trang
+
+            if (bn) {
+                return res.status(200).json({
+                    message: "Đã tìm ra acc kh",
+                    errCode: 0,
+                    data: bn,
+                    totalKH: totalBenhNhan,
+                    totalPages,
+                    currentPage: pageNumber,
+                })
+            } else {
+                return res.status(500).json({
+                    message: "Tìm thể loại thất bại!",
+                    errCode: -1,
+                })
+            }
+
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({
+                message: "Có lỗi xảy ra.",
+                error: error.message,
+            });
+        }
+    },
+
+    khoaAccKH: async (req, res) => {
+        try {
+            // const id = req.params.id
+            const { id, isActive } = req.body;
+
+            const updatedAccount = await BenhNhan.findByIdAndUpdate(id, { isActive }, { new: true });
+
+            if (updatedAccount) {
+                return res.status(200).json({ message: "Cập nhật thành công", data: updatedAccount });
+            } else {
+                return res.status(404).json({ message: "Tài khoản không tìm thấy" });
+            }
+
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({
+                message: "Có lỗi xảy ra.",
+                error: error.message,
+            });
+        }
+    },
+
+    deleteKH: async (req, res) => {
+        try {
+            const id = req.params.id
+
+            let xoa = await BenhNhan.deleteOne({ _id: id })
+
+            if (xoa) {
+                return res.status(200).json({
+                    data: xoa,
+                    message: "Bạn đã xóa tài khoản khách hàng thành công!"
+                })
+            } else {
+                return res.status(500).json({
+                    message: "Bạn đã xóa tài khoản khách hàng thất bại!"
+                })
+            }
+
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({
+                message: "Có lỗi xảy ra.",
+                error: error.message,
+            });
+        }
+    }
 
 }
