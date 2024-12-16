@@ -5,6 +5,7 @@ const initWebRoutes = require('./route/web');
 const userRouter = require('./route/userRouter');
 const doctorRouter = require('./route/doctorRouter');
 const uploadRouter = require('./route/uploadRouter');
+const cauhoiRouter = require('./route/cauHoiRouter');
 const connectDB = require('./config/connectDB');
 const cors = require('cors');
 const multer = require('multer');
@@ -64,6 +65,7 @@ app.use("/api/users", userRouter);
 app.use("/api/doctor", doctorRouter);
 // Sử dụng uploadRouter
 app.use("/api/doctor", uploadRouter); // Đặt đường dẫn cho upload
+app.use("/api/cauhoi", cauhoiRouter); // Đặt đường dẫn cho upload
 
 
 // Lập lịch để chạy mỗi ngày vào lúc 00:00
