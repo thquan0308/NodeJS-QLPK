@@ -49,6 +49,10 @@ router.put("/update-phong-kham", userDoctor.updatePhongKham);
 router.get("/fetch-all-time-gio", userDoctor.fetchAllThoiGianGio);
 // API để lấy thời gian khám của bác sĩ theo ngày
 router.get("/get-time-slots", userDoctor.getTimeSlotsByDoctorAndDate);
+//Api để lấy thơi gian trống của bác sĩ theo ngày
+router.get("/get-time-slots-empty", userDoctor.getTimeSlotsByDoctorAndDateEmpty);
+
+
 // them thoi gian kham benh
 router.post("/add-time", userDoctor.addTimeKhamBenhDoctor);
 // xóa lịch trình cũ đi

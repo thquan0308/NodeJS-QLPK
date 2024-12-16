@@ -1175,7 +1175,74 @@ module.exports = {
         }
     },
 
+    getTimeSlotsByDoctorAndDateEmpty: async (req, res) => {
+        const { doctorId, date } = req.query;
+        console.log("doctorId, date: ", doctorId, date);
+
+        try {
+            // Tìm bác sĩ theo ID
+            const doctor = await Doctor.findById(doctorId);
+            if (!doctor) {
+                return res.status(404).json({ message: 'Bác sĩ không tồn tại!' });
+            }
+
+            // Chuyển đổi ngày từ query
+            const queryDate = moment.utc(date).startOf('day');
+
+            // Tìm time slot cho ngày được chọn
+            const timeSlot = doctor.thoiGianKham.find(slot => {
+                const slotDate = moment.utc(slot.date).startOf('day');
+                return slotDate.isSame(queryDate);
+            });
+
+            if (!timeSlot) {
+                return res.status(200).json({
+                    message: 'Không có thời gian khám cho ngày này!',
+                    timeSlots: [],
+                    tenGioArray: [],
+                    timeGioList: []
+                });
+            }
+
+            // Lấy danh sách tất cả các khung giờ có sẵn
+            const timeGioList = await ThoiGianGio.find({ _id: { $in: timeSlot.thoiGianId } });
+
+            // Lấy danh sách các lịch hẹn đã đặt cho ngày này
+            const existingAppointments = await KhamBenh.find({
+                _idDoctor: doctorId,
+                ngayKhamBenh: moment(queryDate).format('DD/MM/YYYY')
+            });
+
+            // Lọc ra các khung giờ chưa được đặt
+            const availableTimeSlots = timeGioList.filter(timeGio => {
+                const isBooked = existingAppointments.some(appointment => {
+                    return appointment.tenGioKham === timeGio.tenGio;
+                });
+                return !isBooked;
+            });
+
+            // Tạo mảng các tenGio cho các khung giờ còn trống
+            const availableTenGioArray = availableTimeSlots.map(item => item.tenGio);
+            const availableTimeGioIds = availableTimeSlots.map(item => item._id);
+
+            console.log("availableTenGioArray: ", availableTenGioArray);
+
+            return res.status(200).json({
+                message: 'Lấy thời gian trống thành công!',
+                timeSlots: availableTimeGioIds,
+                tenGioArray: availableTenGioArray,
+                timeGioList: availableTimeSlots
+            });
+
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: 'Có lỗi xảy ra!', error });
+        }
+    },
+
+
     // tìm ra doctor để hiển thị chi tiết
+
     fetchDoctorById: async (req, res) => {
 
         let id = req.query.id
