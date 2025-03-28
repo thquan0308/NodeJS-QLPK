@@ -2,7 +2,21 @@
 
 ### Các công nghệ sử dụng:
 
-ReactJS, Node.js, Express.js, MongoDB, Boostrap
+-   Front-end
+    -   Core: React, Vite
+    -   Routing: React Router
+    -   UI: Bootstrap, Ant Design, Styled Components
+    -   State: Redux, Redux Toolkit, Redux Persist
+    -   API: Axios
+    -   Editor: CKEditor
+    -   Effects: React Slick, Swiper, React Spinners, React Icons
+    -   File: XLSX, html2canvas, jsPDF
+-   Back-end
+    -   Core: Node.js, Express
+    -   Database: MongoDB (qua Mongoose)
+    -   Auth: JWT, Passport (Facebook, Google), Bcrypt
+    -   Task: Node Cron, Nodemailer
+    -   Dev: Nodemon, Babel
 
 ### Môi trường cài đặt và công nghệ sử dụng:
 
